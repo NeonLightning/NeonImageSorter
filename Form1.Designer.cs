@@ -146,6 +146,7 @@
             Photos.UseCompatibleStateImageBehavior = false;
             Photos.View = View.Details;
             Photos.SelectedIndexChanged += Photos_SelectedIndexChanged;
+            Photos.KeyDown += Photos_KeyDown;
             // 
             // FileNames
             // 
@@ -165,6 +166,7 @@
             Controls.Add(OutputButton);
             Controls.Add(AddButton);
             Controls.Add(PreviewBox);
+            KeyPreview = true;
             MinimumSize = new Size(1024, 768);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;

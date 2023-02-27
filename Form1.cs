@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Reflection.Metadata;
 
 using System.Security.Policy;
+using System.Text.RegularExpressions;
 
 namespace NeonImageSorter
 {
@@ -20,6 +21,8 @@ namespace NeonImageSorter
         }
         public const int MIN_DRAG_DISTANCE = 5;
         public Point dragStartLocation;
+
+
         private void AddButton_Click(object sender, EventArgs e)
         {
             // Check if the Shift key is held down
@@ -36,6 +39,12 @@ namespace NeonImageSorter
                     {
                         foreach (var path in dialog.FileNames)
                         {
+                            // Check if the full path is already in the list
+                            if (Photos.Items.Cast<ListViewItem>().Any(item => (string)item.Tag == path))
+                            {
+                                continue;
+                            }
+
                             var item = new ListViewItem(Path.GetFileName(path));
                             item.Tag = path;
                             Photos.Items.Add(item);
@@ -50,7 +59,7 @@ namespace NeonImageSorter
                 {
                     if (dialog.ShowDialog() == DialogResult.OK)
                     {
-                        var files = Directory.GetFiles(dialog.SelectedPath, "*.*", SearchOption.AllDirectories)
+                        var files = Directory.GetFiles(dialog.SelectedPath, "*.*", SearchOption.TopDirectoryOnly)
                                              .Where(file => file.EndsWith(".bmp") || file.EndsWith(".jpg") ||
                                                             file.EndsWith(".jpeg") || file.EndsWith(".png"));
 
@@ -93,13 +102,98 @@ namespace NeonImageSorter
                 }
             }
         }
+
+        private void Photos_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                try
+                {
+                    RemButton_Click(null, null);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("An error occurred while deleting the item: " + ex.Message);
+                }
+            }
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
+            {
+                int currentIndex = Photos.SelectedIndices.Count > 0 ? Photos.SelectedIndices[0] : -1;
+                int nextIndex = -1;
+
+                if (e.KeyCode == Keys.Up && currentIndex > 0)
+                {
+                    nextIndex = currentIndex - 1;
+                }
+                else if (e.KeyCode == Keys.Down && currentIndex < Photos.Items.Count - 1)
+                {
+                    nextIndex = currentIndex + 1;
+                }
+
+                if (nextIndex != -1)
+                {
+                    Photos.Items[nextIndex].Selected = true;
+                    Photos.Items[nextIndex].Focused = true;
+                }
+
+                e.Handled = true;
+            }
+        }
         private void RemButton_Click(object sender, EventArgs e)
         {
-            while (Photos.SelectedItems.Count > 0)
+            if (Photos.SelectedItems.Count == 0)
+            {
+                return;
+            }
+
+            int selectedIndex = Photos.SelectedIndices[0];
+
+            if (ModifierKeys == Keys.Shift)
+            {
+                string filePath = (string)Photos.SelectedItems[0].Tag;
+                DialogResult result = MessageBox.Show($"Are you sure you want to permanently delete the file {filePath}?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Yes)
+                {
+                    try
+                    {
+                        File.Delete(filePath);
+                    }
+                    catch (IOException ex)
+                    {
+                        MessageBox.Show($"Failed to delete file {filePath}: {ex.Message}", "Deletion Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    Photos.Items.Remove(Photos.SelectedItems[0]);
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
             {
                 Photos.Items.Remove(Photos.SelectedItems[0]);
             }
-            PreviewBox.Image = Properties.Resources.PreviewImage;
+
+            if (selectedIndex < Photos.Items.Count)
+            {
+                Photos.Items[selectedIndex].Selected = true;
+            }
+            else if (Photos.Items.Count > 0)
+            {
+                Photos.Items[Photos.Items.Count - 1].Selected = true;
+            }
+
+            if (Photos.Items.Count > 0)
+            {
+                PreviewBox.Image = Image.FromFile((string)Photos.SelectedItems[0].Tag);
+            }
+            else
+            {
+                PreviewBox.Image = Properties.Resources.PreviewImage;
+            }
         }
         private void DownButton_Click(object sender, EventArgs e)
         {
@@ -119,26 +213,40 @@ namespace NeonImageSorter
         }
         private void MoveButton_Click_1(object sender, EventArgs e)
         {
+            bool shiftPressed = ModifierKeys.HasFlag(Keys.Shift);
+
             int fileCount = Photos.Items.Count;
             List<string> existingNames = Directory.GetFiles(lastOutputPath)
                                                  .Select(Path.GetFileNameWithoutExtension)
                                                  .ToList();
+            int counter = existingNames
+                            .Select(name => int.TryParse(name.Replace("image", ""), out int number) ? number : 0)
+                            .Max();
+
             for (int i = 0; i < fileCount; i++)
             {
                 string path = (string)Photos.Items[i].Tag;
                 string extension = Path.GetExtension(path);
                 string nameWithoutExtension = Path.GetFileNameWithoutExtension(path);
                 string newName;
-                int index = 0;
                 do
                 {
-                    index++;
-                    newName = $"{nameWithoutExtension} ({index}){extension}";
+                    counter++;
+                    newName = $"image{counter:000000}{extension}";
                 } while (existingNames.Contains(newName));
                 string newPath = Path.Combine(lastOutputPath, newName);
                 try
                 {
-                    File.Move(path, newPath);
+                    if (shiftPressed)
+                    {
+                        // Copy the file instead of moving it
+                        File.Copy(path, newPath);
+                    }
+                    else
+                    {
+                        // Move the file to the new location
+                        File.Move(path, newPath);
+                    }
                 }
                 catch (IOException ex)
                 {
@@ -146,16 +254,17 @@ namespace NeonImageSorter
                     {
                         // A file with the same name already exists in the output folder
                         // Rename the existing file and try again
-                        string existingFilePath = Path.Combine(lastOutputPath, newName);
-                        index = 1;
-                        newName = $"{nameWithoutExtension} ({index}){extension}";
-                        while (existingNames.Contains(newName))
+                        counter++;
+                        newName = $"image{counter:000000}{extension}";
+                        newPath = Path.Combine(lastOutputPath, newName);
+                        if (shiftPressed)
                         {
-                            index++;
-                            newName = $"{nameWithoutExtension} ({index}){extension}";
+                            File.Copy(path, newPath);
                         }
-                        File.Move(existingFilePath, Path.Combine(lastOutputPath, newName));
-                        File.Move(path, newPath);
+                        else
+                        {
+                            File.Move(path, newPath);
+                        }
                     }
                     else
                     {
@@ -163,9 +272,12 @@ namespace NeonImageSorter
                         throw;
                     }
                 }
-                existingNames.Add(nameWithoutExtension);
+                existingNames.Add(newName);
             }
-            Photos.Items.Clear();
+            if (!shiftPressed)
+            {
+                Photos.Items.Clear();
+            }
             PreviewBox.Image = Properties.Resources.PreviewImage;
         }
 
