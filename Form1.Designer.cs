@@ -30,7 +30,6 @@
         {
             PreviewBox = new PictureBox();
             AddButton = new Button();
-            OutputButton = new Button();
             RemButton = new Button();
             UpButton = new Button();
             DownButton = new Button();
@@ -50,7 +49,7 @@
             PreviewBox.Image = Properties.Resources.PreviewImage;
             PreviewBox.Location = new Point(402, 0);
             PreviewBox.Name = "PreviewBox";
-            PreviewBox.Size = new Size(606, 728);
+            PreviewBox.Size = new Size(606, 751);
             PreviewBox.SizeMode = PictureBoxSizeMode.Zoom;
             PreviewBox.TabIndex = 1;
             PreviewBox.TabStop = false;
@@ -58,8 +57,9 @@
             // 
             // AddButton
             // 
+            AddButton.Anchor = AnchorStyles.Left;
             AddButton.FlatStyle = FlatStyle.Popup;
-            AddButton.Location = new Point(321, 12);
+            AddButton.Location = new Point(321, 24);
             AddButton.Name = "AddButton";
             AddButton.Size = new Size(75, 23);
             AddButton.TabIndex = 2;
@@ -67,21 +67,11 @@
             AddButton.UseVisualStyleBackColor = true;
             AddButton.Click += AddButton_Click;
             // 
-            // OutputButton
-            // 
-            OutputButton.FlatStyle = FlatStyle.Popup;
-            OutputButton.Location = new Point(321, 41);
-            OutputButton.Name = "OutputButton";
-            OutputButton.Size = new Size(75, 23);
-            OutputButton.TabIndex = 3;
-            OutputButton.Text = "Output";
-            OutputButton.UseVisualStyleBackColor = true;
-            OutputButton.Click += OutputButton_Click;
-            // 
             // RemButton
             // 
+            RemButton.Anchor = AnchorStyles.Left;
             RemButton.FlatStyle = FlatStyle.Popup;
-            RemButton.Location = new Point(321, 352);
+            RemButton.Location = new Point(321, 140);
             RemButton.MaximumSize = new Size(75, 23);
             RemButton.Name = "RemButton";
             RemButton.Size = new Size(75, 23);
@@ -92,8 +82,9 @@
             // 
             // UpButton
             // 
+            UpButton.Anchor = AnchorStyles.Left;
             UpButton.FlatStyle = FlatStyle.Popup;
-            UpButton.Location = new Point(321, 294);
+            UpButton.Location = new Point(321, 82);
             UpButton.MaximumSize = new Size(75, 23);
             UpButton.Name = "UpButton";
             UpButton.Size = new Size(75, 23);
@@ -104,8 +95,9 @@
             // 
             // DownButton
             // 
+            DownButton.Anchor = AnchorStyles.Left;
             DownButton.FlatStyle = FlatStyle.Popup;
-            DownButton.Location = new Point(321, 410);
+            DownButton.Location = new Point(321, 198);
             DownButton.MaximumSize = new Size(75, 23);
             DownButton.Name = "DownButton";
             DownButton.Size = new Size(75, 23);
@@ -116,9 +108,9 @@
             // 
             // MoveButton
             // 
-            MoveButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            MoveButton.Anchor = AnchorStyles.Left;
             MoveButton.FlatStyle = FlatStyle.Popup;
-            MoveButton.Location = new Point(321, 694);
+            MoveButton.Location = new Point(321, 256);
             MoveButton.MaximumSize = new Size(75, 23);
             MoveButton.Name = "MoveButton";
             MoveButton.Size = new Size(75, 23);
@@ -142,7 +134,7 @@
             Photos.Name = "Photos";
             Photos.ShowGroups = false;
             Photos.ShowItemToolTips = true;
-            Photos.Size = new Size(315, 728);
+            Photos.Size = new Size(315, 751);
             Photos.TabIndex = 1;
             Photos.UseCompatibleStateImageBehavior = false;
             Photos.View = View.Details;
@@ -155,7 +147,8 @@
             // 
             // SettingsButton
             // 
-            SettingsButton.Location = new Point(321, 70);
+            SettingsButton.Anchor = AnchorStyles.Left;
+            SettingsButton.Location = new Point(321, 694);
             SettingsButton.Name = "SettingsButton";
             SettingsButton.Size = new Size(75, 23);
             SettingsButton.TabIndex = 8;
@@ -174,14 +167,12 @@
             Controls.Add(DownButton);
             Controls.Add(UpButton);
             Controls.Add(RemButton);
-            Controls.Add(OutputButton);
             Controls.Add(AddButton);
             Controls.Add(PreviewBox);
             KeyPreview = true;
             MinimumSize = new Size(1024, 768);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            WindowState = FormWindowState.Maximized;
             KeyDown += Photos_KeyDown;
             ((System.ComponentModel.ISupportInitialize)PreviewBox).EndInit();
             ResumeLayout(false);
@@ -190,7 +181,6 @@
         #endregion
         private PictureBox PreviewBox;
         private Button AddButton;
-        private Button OutputButton;
         private Button RemButton;
         private Button UpButton;
         private Button DownButton;

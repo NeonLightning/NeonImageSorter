@@ -1,5 +1,6 @@
 using NeonImageSorter.Properties;
 using System.Diagnostics;
+
 namespace NeonImageSorter
 {
     public partial class MainForm : Form
@@ -7,7 +8,8 @@ namespace NeonImageSorter
         public string fileName = Properties.Settings.Default.FileNameString;
         public const int MIN_DRAG_DISTANCE = 5;
         public Point dragStartLocation;
-        public string lastOutputPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        public string lastOutputPath = Settings.Default.OutputFolderPath;
+        private Point lastMousePos;
         public MainForm()
         {
             InitializeComponent();
@@ -77,46 +79,34 @@ namespace NeonImageSorter
                 }
             }
         }
+
+
         private void MoveButton_Click_1(object sender, EventArgs e)
         {
-            bool shiftPressed = ModifierKeys.HasFlag(Keys.Shift);
-            int fileCount = Photos.Items.Count;
-            List<string> existingNames = Directory.GetFiles(lastOutputPath)
-                                                 .Select(Path.GetFileNameWithoutExtension)
-                                                 .ToList();
-            int counter = existingNames
-                            .Select(name => int.TryParse(name.Replace("image", ""), out int number) ? number : 0)
-                            .Max();
-            for (int i = 0; i < fileCount; i++)
+            try
             {
-                string path = (string)Photos.Items[i].Tag;
-                string extension = Path.GetExtension(path);
-                string nameWithoutExtension = Path.GetFileNameWithoutExtension(path);
-                string newName;
-                do
+                bool shiftPressed = ModifierKeys.HasFlag(Keys.Shift);
+                int fileCount = Photos.Items.Count;
+                List<string> existingNames = Directory.GetFiles(Settings.Default.OutputFolderPath)
+                                                     .Select(Path.GetFileNameWithoutExtension)
+                                                     .ToList();
+                int counter = existingNames.Any() ? existingNames
+                                .Select(name => int.TryParse(name.Replace("image", ""), out int number) ? number : 0)
+                                .Max() : 0;
+                for (int i = 0; i < fileCount; i++)
                 {
-                    counter++;
-                    newName = $"{Settings.Default.FileNameString}{(counter + 1).ToString().PadLeft(Settings.Default.PaddingNumbers, '0')}{extension}";
-                } while (existingNames.Contains(newName));
-                string newPath = Path.Combine(lastOutputPath, newName);
-                try
-                {
-                    if (shiftPressed)
-                    {
-                        File.Copy(path, newPath);
-                    }
-                    else
-                    {
-                        File.Move(path, newPath);
-                    }
-                }
-                catch (IOException ex)
-                {
-                    if (ex.Message.Contains("already exists"))
+                    string path = (string)Photos.Items[i].Tag;
+                    string extension = Path.GetExtension(path);
+                    string nameWithoutExtension = Path.GetFileNameWithoutExtension(path);
+                    string newName;
+                    do
                     {
                         counter++;
-                        newName = $"image{counter:000000}{extension}";
-                        newPath = Path.Combine(lastOutputPath, newName);
+                        newName = $"{Settings.Default.FileNameString}{(counter + 1).ToString().PadLeft(Settings.Default.PaddingNumbers, '0')}{extension}";
+                    } while (existingNames.Contains(newName));
+                    string newPath = Path.Combine(Settings.Default.OutputFolderPath, newName);
+                    try
+                    {
                         if (shiftPressed)
                         {
                             File.Copy(path, newPath);
@@ -126,30 +116,41 @@ namespace NeonImageSorter
                             File.Move(path, newPath);
                         }
                     }
-                    else
+                    catch (IOException ex)
                     {
-                        throw;
+                        if (ex.Message.Contains("already exists"))
+                        {
+                            counter++;
+                            newName = $"{Settings.Default.FileNameString}{(counter + 1).ToString().PadLeft(Settings.Default.PaddingNumbers, '0')}{extension}";
+                            newPath = Path.Combine(lastOutputPath, newName);
+                            if (shiftPressed)
+                            {
+                                File.Copy(path, newPath);
+                            }
+                            else
+                            {
+                                File.Move(path, newPath);
+                            }
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    existingNames.Add(newName);
                 }
-                existingNames.Add(newName);
-            }
-            if (!shiftPressed)
-            {
-                Photos.Items.Clear();
-            }
-            PreviewBox.Image = Properties.Resources.PreviewImage;
-        }
-        private void OutputButton_Click(object sender, EventArgs e)
-        {
-            using (var dialog = new FolderBrowserDialog())
-            {
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (!shiftPressed)
                 {
-                    lastOutputPath = dialog.SelectedPath;
-                    OutputButton.Text = lastOutputPath;
+                    Photos.Items.Clear();
                 }
+                PreviewBox.Image = Properties.Resources.PreviewImage;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error Was: " + ex.Message); // Handle the exception here. You can show an error message to the user or log the error to a file.
             }
         }
+
         private void Photos_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)

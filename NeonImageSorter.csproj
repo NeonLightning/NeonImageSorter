@@ -6,12 +6,28 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <StartupObject>NeonImageSorter.Program</StartupObject>
+    <ApplicationIcon>bright_yellow_lightning_bolt_striking_a_paintbrush_AAGP6Rek.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+    <DebugType>none</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="bright_yellow_lightning_bolt_striking_a_paintbrush_AAGP6Rek.ico" />
     <None Remove="Error.png" />
     <None Remove="PreviewImage.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bright_yellow_lightning_bolt_striking_a_paintbrush_AAGP6Rek.ico" />
   </ItemGroup>
 
   <ItemGroup>

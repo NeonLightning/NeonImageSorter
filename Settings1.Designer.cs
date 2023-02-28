@@ -32,6 +32,8 @@
             textBox2 = new TextBox();
             label1 = new Label();
             PaddingNumber = new ComboBox();
+            OutputButton = new Button();
+            OutputFolderBox = new TextBox();
             SuspendLayout();
             // 
             // SaveButton
@@ -72,11 +74,32 @@
             PaddingNumber.Size = new Size(108, 23);
             PaddingNumber.TabIndex = 3;
             // 
+            // OutputButton
+            // 
+            OutputButton.FlatStyle = FlatStyle.Popup;
+            OutputButton.Location = new Point(277, 56);
+            OutputButton.Name = "OutputButton";
+            OutputButton.Size = new Size(108, 23);
+            OutputButton.TabIndex = 4;
+            OutputButton.Text = "Output";
+            OutputButton.UseVisualStyleBackColor = true;
+            OutputButton.Click += OutputButton_Click;
+            // 
+            // OutputFolderBox
+            // 
+            OutputFolderBox.Location = new Point(12, 56);
+            OutputFolderBox.Name = "OutputFolderBox";
+            OutputFolderBox.ReadOnly = true;
+            OutputFolderBox.Size = new Size(265, 23);
+            OutputFolderBox.TabIndex = 5;
+            // 
             // Settings1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(397, 450);
+            Controls.Add(OutputFolderBox);
+            Controls.Add(OutputButton);
             Controls.Add(PaddingNumber);
             Controls.Add(label1);
             Controls.Add(textBox2);
@@ -96,5 +119,7 @@
         private Label label1;
         private ComboBox comboBox1;
         private ComboBox PaddingNumber;
+        private Button OutputButton;
+        private TextBox OutputFolderBox;
     }
 }

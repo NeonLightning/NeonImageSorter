@@ -1,14 +1,28 @@
-﻿using System.Text.RegularExpressions;
+﻿using NeonImageSorter.Properties;
+using System.Text.RegularExpressions;
 
 namespace NeonImageSorter
 {
     public partial class Settings1 : Form
     {
+        public string lastOutputPath = Settings.Default.OutputFolderPath;
         public Settings1()
         {
             InitializeComponent();
         }
-
+        private void OutputButton_Click(object sender, EventArgs e)
+        {
+            using (var dialog = new FolderBrowserDialog())
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    Settings.Default.OutputFolderPath = dialog.SelectedPath;
+                    Settings.Default.OutputFolderPath = lastOutputPath;
+                    OutputFolderBox.Text = Settings.Default.OutputFolderPath;
+                    Settings.Default.Save();
+                }
+            }
+        }
         private string fileName = Properties.Settings.Default.FileNameString;
         private void SaveButton_Click(object sender, EventArgs e)
         {
@@ -36,6 +50,7 @@ namespace NeonImageSorter
         {
             PaddingNumber.SelectedIndex = Properties.Settings.Default.PaddingNumbers;
             textBox2.Text = Properties.Settings.Default.FileNameString;
+            OutputFolderBox.Text = Properties.Settings.Default.OutputFolderPath;
         }
     }
 }
