@@ -37,6 +37,7 @@
             MoveButton = new Button();
             Photos = new ListView();
             FileNames = new ColumnHeader();
+            SettingsButton = new Button();
             ((System.ComponentModel.ISupportInitialize)PreviewBox).BeginInit();
             SuspendLayout();
             // 
@@ -146,18 +147,28 @@
             Photos.UseCompatibleStateImageBehavior = false;
             Photos.View = View.Details;
             Photos.SelectedIndexChanged += Photos_SelectedIndexChanged;
-            Photos.KeyDown += Photos_KeyDown;
             // 
             // FileNames
             // 
             FileNames.Text = "FileNames";
             FileNames.Width = 311;
             // 
+            // SettingsButton
+            // 
+            SettingsButton.Location = new Point(321, 70);
+            SettingsButton.Name = "SettingsButton";
+            SettingsButton.Size = new Size(75, 23);
+            SettingsButton.TabIndex = 8;
+            SettingsButton.Text = "Settings";
+            SettingsButton.UseVisualStyleBackColor = true;
+            SettingsButton.Click += SettingsButton_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1008, 729);
+            Controls.Add(SettingsButton);
             Controls.Add(Photos);
             Controls.Add(MoveButton);
             Controls.Add(DownButton);
@@ -171,6 +182,7 @@
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             WindowState = FormWindowState.Maximized;
+            KeyDown += Photos_KeyDown;
             ((System.ComponentModel.ISupportInitialize)PreviewBox).EndInit();
             ResumeLayout(false);
         }
@@ -185,5 +197,6 @@
         private Button MoveButton;
         private ColumnHeader FileNames;
         public ListView Photos;
+        private Button SettingsButton;
     }
 }

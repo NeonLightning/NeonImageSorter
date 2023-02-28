@@ -3,7 +3,13 @@
   <Profiles />
   <Settings>
     <Setting Name="OutputFolderPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Environment.GetFolderPath(Environment.SpecialFolder.Desktop)</Value>
+    </Setting>
+    <Setting Name="FileNameString" Type="System.String" Scope="User">
+      <Value Profile="(Default)">image</Value>
+    </Setting>
+    <Setting Name="PaddingNumbers" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

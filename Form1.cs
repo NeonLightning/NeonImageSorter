@@ -1,8 +1,10 @@
+using NeonImageSorter.Properties;
 using System.Diagnostics;
 namespace NeonImageSorter
 {
     public partial class MainForm : Form
     {
+        public string fileName = Properties.Settings.Default.FileNameString;
         public const int MIN_DRAG_DISTANCE = 5;
         public Point dragStartLocation;
         public string lastOutputPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -70,6 +72,8 @@ namespace NeonImageSorter
                     var item = Photos.Items[index];
                     Photos.Items.RemoveAt(index);
                     Photos.Items.Insert(index + 1, item);
+                    item.Selected = true;
+                    item.Focused = true;
                 }
             }
         }
@@ -92,7 +96,7 @@ namespace NeonImageSorter
                 do
                 {
                     counter++;
-                    newName = $"image{counter:000000}{extension}";
+                    newName = $"{Settings.Default.FileNameString}{(counter + 1).ToString().PadLeft(Settings.Default.PaddingNumbers, '0')}{extension}";
                 } while (existingNames.Contains(newName));
                 string newPath = Path.Combine(lastOutputPath, newName);
                 try
@@ -224,6 +228,19 @@ namespace NeonImageSorter
             {
                 PreviewBox.Image = Properties.Resources.PreviewImage;
             }
+            foreach (ListViewItem item in Photos.Items)
+            {
+                if (item.Selected)
+                {
+                    item.BackColor = SystemColors.Highlight;
+                    item.ForeColor = SystemColors.HighlightText;
+                }
+                else
+                {
+                    item.BackColor = Photos.BackColor;
+                    item.ForeColor = SystemColors.ControlText;
+                }
+            }
         }
         private void PreviewBox_Click(object sender, EventArgs e)
         {
@@ -297,8 +314,15 @@ namespace NeonImageSorter
                     var item = Photos.Items[index];
                     Photos.Items.RemoveAt(index);
                     Photos.Items.Insert(shiftKeyDown ? 0 : index - 1, item);
+                    item.Focused = true;
                 }
             }
+        }
+
+        private void SettingsButton_Click(object sender, EventArgs e)
+        {
+            Settings1 settingsForm = new Settings1();
+            settingsForm.ShowDialog();
         }
     }
 }

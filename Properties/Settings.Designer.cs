@@ -25,13 +25,37 @@ namespace NeonImageSorter.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Environment.GetFolderPath(Environment.SpecialFolder.Desktop)")]
         public string OutputFolderPath {
             get {
                 return ((string)(this["OutputFolderPath"]));
             }
             set {
                 this["OutputFolderPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("image")]
+        public string FileNameString {
+            get {
+                return ((string)(this["FileNameString"]));
+            }
+            set {
+                this["FileNameString"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int PaddingNumbers {
+            get {
+                return ((int)(this["PaddingNumbers"]));
+            }
+            set {
+                this["PaddingNumbers"] = value;
             }
         }
     }
