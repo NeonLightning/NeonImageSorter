@@ -38,7 +38,7 @@
             // 
             // SaveButton
             // 
-            SaveButton.Location = new Point(310, 415);
+            SaveButton.Location = new Point(310, 90);
             SaveButton.Name = "SaveButton";
             SaveButton.Size = new Size(75, 23);
             SaveButton.TabIndex = 1;
@@ -97,7 +97,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(397, 450);
+            ClientSize = new Size(397, 125);
             Controls.Add(OutputFolderBox);
             Controls.Add(OutputButton);
             Controls.Add(PaddingNumber);

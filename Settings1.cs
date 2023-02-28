@@ -10,6 +10,8 @@ namespace NeonImageSorter
         {
             InitializeComponent();
         }
+        private string fileName = Properties.Settings.Default.FileNameString;
+
         private void OutputButton_Click(object sender, EventArgs e)
         {
             using (var dialog = new FolderBrowserDialog())
@@ -17,13 +19,12 @@ namespace NeonImageSorter
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     Settings.Default.OutputFolderPath = dialog.SelectedPath;
-                    Settings.Default.OutputFolderPath = lastOutputPath;
+                    lastOutputPath = Settings.Default.OutputFolderPath;
                     OutputFolderBox.Text = Settings.Default.OutputFolderPath;
                     Settings.Default.Save();
                 }
             }
         }
-        private string fileName = Properties.Settings.Default.FileNameString;
         private void SaveButton_Click(object sender, EventArgs e)
         {
             string fileName = textBox2.Text.Trim();

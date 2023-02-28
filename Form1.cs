@@ -5,11 +5,10 @@ namespace NeonImageSorter
 {
     public partial class MainForm : Form
     {
-        public string fileName = Properties.Settings.Default.FileNameString;
         public const int MIN_DRAG_DISTANCE = 5;
         public Point dragStartLocation;
+        public string fileName = Properties.Settings.Default.FileNameString;
         public string lastOutputPath = Settings.Default.OutputFolderPath;
-        private Point lastMousePos;
         public MainForm()
         {
             InitializeComponent();
@@ -18,6 +17,8 @@ namespace NeonImageSorter
             Photos.MouseUp += Photos_MouseUp;
             PreviewBox.Image = Properties.Resources.PreviewImage;
         }
+
+        private Point lastMousePos;
         private void AddButton_Click(object sender, EventArgs e)
         {
             bool shiftPressed = ModifierKeys == Keys.Shift;
@@ -303,6 +304,12 @@ namespace NeonImageSorter
                 PreviewBox.Image = Properties.Resources.PreviewImage;
             }
         }
+        private void SettingsButton_Click(object sender, EventArgs e)
+        {
+            Settings1 settingsForm = new Settings1();
+            settingsForm.ShowDialog();
+        }
+
         private void UpButton_Click(object sender, EventArgs e)
         {
             var indices = Photos.SelectedIndices.Cast<int>().ToList();
@@ -318,12 +325,6 @@ namespace NeonImageSorter
                     item.Focused = true;
                 }
             }
-        }
-
-        private void SettingsButton_Click(object sender, EventArgs e)
-        {
-            Settings1 settingsForm = new Settings1();
-            settingsForm.ShowDialog();
         }
     }
 }
