@@ -159,6 +159,7 @@
             // 
             // ClearButton
             // 
+            ClearButton.Anchor = AnchorStyles.Left;
             ClearButton.Location = new Point(321, 314);
             ClearButton.Name = "ClearButton";
             ClearButton.Size = new Size(75, 23);

@@ -72,7 +72,7 @@ namespace NeonImageSorter
             {
                 foreach (ListViewItem item in Photos.Items)
                 {
-                    string filePath = item.SubItems[1].Text;
+                    string filePath = (string)item.Tag;
                     if (File.Exists(filePath))
                     {
                         File.Delete(filePath);
