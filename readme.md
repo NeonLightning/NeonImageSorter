@@ -11,6 +11,8 @@ This is a C# program for sorting and renaming image files. It includes a GUI wit
 Settings
 you can set the output path, and the output name.
 
+if you click on the picture it'll open in the os default application
+
 
 These are the alternate buttons while holding shift
 
