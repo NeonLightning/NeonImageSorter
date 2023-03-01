@@ -1,5 +1,6 @@
 using NeonImageSorter.Properties;
 using System.Diagnostics;
+
 namespace NeonImageSorter
 {
     public partial class MainForm : Form
@@ -8,6 +9,7 @@ namespace NeonImageSorter
         public Point dragStartLocation;
         public string fileName = Properties.Settings.Default.FileNameString;
         public string lastOutputPath = Settings.Default.OutputFolderPath;
+
         public MainForm()
         {
             InitializeComponent();
@@ -16,7 +18,9 @@ namespace NeonImageSorter
             Photos.MouseUp += Photos_MouseUp;
             PreviewBox.Image = Properties.Resources.PreviewImage;
         }
+
         private Point lastMousePos;
+
         private void AddButton_Click(object sender, EventArgs e)
         {
             bool shiftPressed = ModifierKeys == Keys.Shift;
@@ -60,6 +64,24 @@ namespace NeonImageSorter
                 }
             }
         }
+
+        private void ClearButton_Click(object sender, EventArgs e)
+        {
+            bool shiftPressed = ModifierKeys.HasFlag(Keys.Shift);
+            if (shiftPressed)
+            {
+                foreach (ListViewItem item in Photos.Items)
+                {
+                    string filePath = item.SubItems[1].Text;
+                    if (File.Exists(filePath))
+                    {
+                        File.Delete(filePath);
+                    }
+                }
+            }
+            Photos.Items.Clear();
+        }
+
         private void DownButton_Click(object sender, EventArgs e)
         {
             var indices = Photos.SelectedIndices.Cast<int>().ToList();
@@ -78,6 +100,7 @@ namespace NeonImageSorter
                 }
             }
         }
+
         private void MoveButton_Click_1(object sender, EventArgs e)
         {
             try
@@ -147,6 +170,7 @@ namespace NeonImageSorter
                 MessageBox.Show("Error Was: " + ex.Message);
             }
         }
+
         private void Photos_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
@@ -180,10 +204,12 @@ namespace NeonImageSorter
                 e.Handled = true;
             }
         }
+
         private void Photos_MouseDown(object sender, MouseEventArgs e)
         {
             dragStartLocation = e.Location;
         }
+
         private void Photos_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -210,9 +236,11 @@ namespace NeonImageSorter
                 }
             }
         }
+
         private void Photos_MouseUp(object sender, MouseEventArgs e)
         {
         }
+
         private void Photos_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (Photos.SelectedItems.Count > 0)
@@ -239,6 +267,7 @@ namespace NeonImageSorter
                 }
             }
         }
+
         private void PreviewBox_Click(object sender, EventArgs e)
         {
             if (Photos.SelectedItems.Count > 0)
@@ -249,6 +278,7 @@ namespace NeonImageSorter
                 Process.Start(startInfo);
             }
         }
+
         private void RemButton_Click(object sender, EventArgs e)
         {
             if (Photos.SelectedItems.Count == 0)
@@ -299,11 +329,13 @@ namespace NeonImageSorter
                 PreviewBox.Image = Properties.Resources.PreviewImage;
             }
         }
+
         private void SettingsButton_Click(object sender, EventArgs e)
         {
             Settings1 settingsForm = new Settings1();
             settingsForm.ShowDialog();
         }
+
         private void UpButton_Click(object sender, EventArgs e)
         {
             var indices = Photos.SelectedIndices.Cast<int>().ToList();
@@ -319,22 +351,6 @@ namespace NeonImageSorter
                     item.Focused = true;
                 }
             }
-        }
-        private void ClearButton_Click(object sender, EventArgs e)
-        {
-            bool shiftPressed = ModifierKeys.HasFlag(Keys.Shift);
-            if (shiftPressed)
-            {
-                foreach (ListViewItem item in Photos.Items)
-                {
-                    string filePath = item.SubItems[1].Text;
-                    if (File.Exists(filePath))
-                    {
-                        File.Delete(filePath);
-                    }
-                }
-            }
-            Photos.Items.Clear();
         }
     }
 }

@@ -1,15 +1,19 @@
 ﻿using NeonImageSorter.Properties;
 using System.Text.RegularExpressions;
+
 namespace NeonImageSorter
 {
     public partial class Settings1 : Form
     {
         public string lastOutputPath = Settings.Default.OutputFolderPath;
+
         public Settings1()
         {
             InitializeComponent();
         }
+
         private string fileName = Properties.Settings.Default.FileNameString;
+
         private void OutputButton_Click(object sender, EventArgs e)
         {
             using (var dialog = new FolderBrowserDialog())
@@ -23,6 +27,7 @@ namespace NeonImageSorter
                 }
             }
         }
+
         private void SaveButton_Click(object sender, EventArgs e)
         {
             string fileName = textBox2.Text.Trim();
@@ -39,6 +44,7 @@ namespace NeonImageSorter
                 Properties.Settings.Default.Save();
             }
         }
+
         private void Settings1_Load(object sender, EventArgs e)
         {
             PaddingNumber.SelectedIndex = Properties.Settings.Default.PaddingNumbers;
