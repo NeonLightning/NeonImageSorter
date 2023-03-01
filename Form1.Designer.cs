@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             PreviewBox = new PictureBox();
             AddButton = new Button();
             RemButton = new Button();
@@ -182,6 +183,7 @@
             Controls.Add(RemButton);
             Controls.Add(AddButton);
             Controls.Add(PreviewBox);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
             MinimumSize = new Size(1024, 768);
             Name = "MainForm";
