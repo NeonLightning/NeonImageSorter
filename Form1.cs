@@ -1,6 +1,5 @@
 using NeonImageSorter.Properties;
 using System.Diagnostics;
-
 namespace NeonImageSorter
 {
     public partial class MainForm : Form
@@ -17,7 +16,6 @@ namespace NeonImageSorter
             Photos.MouseUp += Photos_MouseUp;
             PreviewBox.Image = Properties.Resources.PreviewImage;
         }
-
         private Point lastMousePos;
         private void AddButton_Click(object sender, EventArgs e)
         {
@@ -80,8 +78,6 @@ namespace NeonImageSorter
                 }
             }
         }
-
-
         private void MoveButton_Click_1(object sender, EventArgs e)
         {
             try
@@ -148,10 +144,9 @@ namespace NeonImageSorter
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error Was: " + ex.Message); // Handle the exception here. You can show an error message to the user or log the error to a file.
+                MessageBox.Show("Error Was: " + ex.Message);
             }
         }
-
         private void Photos_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
@@ -309,7 +304,6 @@ namespace NeonImageSorter
             Settings1 settingsForm = new Settings1();
             settingsForm.ShowDialog();
         }
-
         private void UpButton_Click(object sender, EventArgs e)
         {
             var indices = Photos.SelectedIndices.Cast<int>().ToList();
@@ -325,6 +319,22 @@ namespace NeonImageSorter
                     item.Focused = true;
                 }
             }
+        }
+        private void ClearButton_Click(object sender, EventArgs e)
+        {
+            bool shiftPressed = ModifierKeys.HasFlag(Keys.Shift);
+            if (shiftPressed)
+            {
+                foreach (ListViewItem item in Photos.Items)
+                {
+                    string filePath = item.SubItems[1].Text;
+                    if (File.Exists(filePath))
+                    {
+                        File.Delete(filePath);
+                    }
+                }
+            }
+            Photos.Items.Clear();
         }
     }
 }

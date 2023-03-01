@@ -37,6 +37,7 @@
             Photos = new ListView();
             FileNames = new ColumnHeader();
             SettingsButton = new Button();
+            ClearButton = new Button();
             ((System.ComponentModel.ISupportInitialize)PreviewBox).BeginInit();
             SuspendLayout();
             // 
@@ -156,11 +157,22 @@
             SettingsButton.UseVisualStyleBackColor = true;
             SettingsButton.Click += SettingsButton_Click;
             // 
+            // ClearButton
+            // 
+            ClearButton.Location = new Point(321, 314);
+            ClearButton.Name = "ClearButton";
+            ClearButton.Size = new Size(75, 23);
+            ClearButton.TabIndex = 9;
+            ClearButton.Text = "Clear";
+            ClearButton.UseVisualStyleBackColor = true;
+            ClearButton.Click += ClearButton_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1008, 729);
+            Controls.Add(ClearButton);
             Controls.Add(SettingsButton);
             Controls.Add(Photos);
             Controls.Add(MoveButton);
@@ -188,5 +200,6 @@
         private ColumnHeader FileNames;
         public ListView Photos;
         private Button SettingsButton;
+        private Button ClearButton;
     }
 }
