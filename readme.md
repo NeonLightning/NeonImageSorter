@@ -24,6 +24,13 @@ remove(or pressing delete on the keyboard) deletes the file.
 
 clear delets all files
 
+
+
+Screenshots
+
+mainui
+
+
 [main screenshot empty](https://user-images.githubusercontent.com/2992888/222248645-929b86ac-74ba-4e9e-a8a5-954e9ffa8e09.png)
 
 
@@ -31,6 +38,9 @@ clear delets all files
 
 
 ![settings](https://user-images.githubusercontent.com/2992888/222249359-19c8b68b-fa33-4cc5-a6f5-e363282b4a8e.png)
+
+
+before and after
 
 
 ![before](https://user-images.githubusercontent.com/2992888/222249479-33f6fd7f-e49a-4996-ac5d-1ebecca53edf.png)
