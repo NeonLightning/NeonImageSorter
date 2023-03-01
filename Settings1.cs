@@ -20,7 +20,7 @@ namespace NeonImageSorter
                 {
                     Settings.Default.OutputFolderPath = dialog.SelectedPath;
                     lastOutputPath = Settings.Default.OutputFolderPath;
-                    OutputFolderBox.Text = Settings.Default.OutputFolderPath;
+                    OutputFolderBox.Text = (Settings.Default.OutputFolderPath);
                     Settings.Default.Save();
                 }
             }
