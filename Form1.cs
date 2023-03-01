@@ -111,7 +111,7 @@ namespace NeonImageSorter
                                                      .Select(Path.GetFileNameWithoutExtension)
                                                      .ToList();
                 int counter = existingNames.Any() ? existingNames
-                                .Select(name => int.TryParse(name.Replace("image", ""), out int number) ? number : 0)
+                                .Select(name => int.TryParse(name.Replace(Settings.Default.FileNameString, ""), out int number) ? number : 0)
                                 .Max() : 0;
                 for (int i = 0; i < fileCount; i++)
                 {
@@ -122,8 +122,8 @@ namespace NeonImageSorter
                     do
                     {
                         counter++;
-                        newName = $"{Settings.Default.FileNameString}{(counter + 1).ToString().PadLeft(Settings.Default.PaddingNumbers, '0')}{extension}";
-                    } while (existingNames.Contains(newName));
+                        newName = $"{Settings.Default.FileNameString}{counter.ToString().PadLeft(Settings.Default.PaddingNumbers, '0')}{extension}";
+                    } while (existingNames.Contains(Path.GetFileNameWithoutExtension(newName)));
                     string newPath = Path.Combine(Settings.Default.OutputFolderPath, newName);
                     try
                     {
@@ -135,14 +135,15 @@ namespace NeonImageSorter
                         {
                             File.Move(path, newPath);
                         }
+                        existingNames.Add(Path.GetFileNameWithoutExtension(newName));
                     }
                     catch (IOException ex)
                     {
                         if (ex.Message.Contains("already exists"))
                         {
                             counter++;
-                            newName = $"{Settings.Default.FileNameString}{(counter + 1).ToString().PadLeft(Settings.Default.PaddingNumbers, '0')}{extension}";
-                            newPath = Path.Combine(lastOutputPath, newName);
+                            newName = $"{Settings.Default.FileNameString}{counter.ToString().PadLeft(Settings.Default.PaddingNumbers, '0')}{extension}";
+                            newPath = Path.Combine(Settings.Default.OutputFolderPath, newName);
                             if (shiftPressed)
                             {
                                 File.Copy(path, newPath);
@@ -151,13 +152,13 @@ namespace NeonImageSorter
                             {
                                 File.Move(path, newPath);
                             }
+                            existingNames.Add(Path.GetFileNameWithoutExtension(newName));
                         }
                         else
                         {
                             throw;
                         }
                     }
-                    existingNames.Add(newName);
                 }
                 if (!shiftPressed)
                 {
