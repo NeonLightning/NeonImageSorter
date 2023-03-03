@@ -1,30 +1,33 @@
 NeonImageSorter by NeonLightning
+
 Just Something i'm making to sort my images to learn some c# and make my interpolation software happy.
 
 
 
 summary by chatgpt
 
-This is a C# program for sorting and renaming image files. It includes a GUI with buttons for adding, removing, and rearranging image files in a list view control. The program allows the user to select a folder of images or individual image files to be sorted and renamed using a specified file name string and number padding. The renamed files are moved or copied to a specified output folder. The program also includes error handling and a preview image display.
+This is a C# program for a tool called NeonImageSorter. It allows users to select and sort image files, and then move or copy them to a specified folder with a chosen naming convention. Here is a breakdown of the major components of the program:
 
 
-Settings
-you can set the output path, and the output name.
+The program is built using Windows Forms and consists of a single form called MainForm.
 
-if you click on the picture it'll open in the os default application
+The user interface includes a ListView control (Photos) for displaying the selected image files, as well as several buttons for adding, removing, and sorting the images.
 
+The Add button allows the user to select either a folder or individual files to add to the Photos list. If the user selects a folder, all image files within that folder will be added.
 
-These are the alternate buttons while holding shift
+The Clear button removes all items from the Photos list.
 
-up moves to top
+The Remove button deletes the selected items from the Photos list and, optionally, from disk if the Shift key is held down when the button is clicked.
 
-down moves to bottom
+The Up and Down buttons allow the user to move the selected items up or down in the list.
 
-add adds individual instead of folders
+The Move button moves or copies the selected image files to a specified folder with a naming convention. If the Shift key is held down, the files are copied; otherwise, they are moved. If a file with the same name already exists in the output folder, the 
 
-remove(or pressing delete on the keyboard) deletes the file.
+program will add a number to the end of the filename to make it unique.
 
-clear delets all files
+The PreviewBox displays a preview image that is stored as a resource in the program.
+
+Overall, the program provides a simple interface for organizing and renaming image files.
 
 
 
