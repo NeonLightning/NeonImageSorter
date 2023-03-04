@@ -39,6 +39,7 @@
             FileNames = new ColumnHeader();
             SettingsButton = new Button();
             ClearButton = new Button();
+            DateSortButton = new Button();
             ((System.ComponentModel.ISupportInitialize)PreviewBox).BeginInit();
             SuspendLayout();
             // 
@@ -131,12 +132,12 @@
             Photos.HeaderStyle = ColumnHeaderStyle.None;
             Photos.HideSelection = true;
             Photos.LabelWrap = false;
-            Photos.Location = new Point(0, 0);
+            Photos.Location = new Point(0, 24);
             Photos.MultiSelect = false;
             Photos.Name = "Photos";
             Photos.ShowGroups = false;
             Photos.ShowItemToolTips = true;
-            Photos.Size = new Size(315, 751);
+            Photos.Size = new Size(315, 704);
             Photos.TabIndex = 1;
             Photos.UseCompatibleStateImageBehavior = false;
             Photos.View = View.Details;
@@ -169,11 +170,22 @@
             ClearButton.UseVisualStyleBackColor = true;
             ClearButton.Click += ClearButton_Click;
             // 
+            // DateSortButton
+            // 
+            DateSortButton.Location = new Point(240, 0);
+            DateSortButton.Name = "DateSortButton";
+            DateSortButton.Size = new Size(75, 23);
+            DateSortButton.TabIndex = 10;
+            DateSortButton.Text = "Date";
+            DateSortButton.UseVisualStyleBackColor = true;
+            DateSortButton.Click += DateSortButton_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1008, 729);
+            Controls.Add(DateSortButton);
             Controls.Add(ClearButton);
             Controls.Add(SettingsButton);
             Controls.Add(Photos);
@@ -204,5 +216,6 @@
         public ListView Photos;
         private Button SettingsButton;
         private Button ClearButton;
+        private Button DateSortButton;
     }
 }
