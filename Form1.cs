@@ -64,7 +64,7 @@ namespace NeonImageSorter
                     {
                         compareResult = ObjectCompare.Compare(textX, textY);
                     }
-                    else if (OrderOfSort== SortOrder.Ascending)
+                    else if (OrderOfSort == SortOrder.Ascending)
                     {
                         compareResult = ObjectCompare.Compare(textY, textX);
                     }
@@ -475,7 +475,8 @@ namespace NeonImageSorter
         {
             if (Photos.SelectedItems.Count > 0)
             {
-                var path = (string)Photos.SelectedItems[0].Tag;
+                PhotoInfo photoInfo = (PhotoInfo)Photos.SelectedItems[0].Tag;
+                string path = photoInfo.Path;
                 var startInfo = new ProcessStartInfo(path);
                 startInfo.UseShellExecute = true;
                 Process.Start(startInfo);
