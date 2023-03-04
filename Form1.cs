@@ -1,5 +1,4 @@
 using NeonImageSorter.Properties;
-using System;
 using System.Collections;
 using System.Diagnostics;
 
@@ -11,9 +10,8 @@ namespace NeonImageSorter
         public Point dragStartLocation;
         public string fileName = Properties.Settings.Default.FileNameString;
         public string lastOutputPath = Settings.Default.OutputFolderPath;
-        public bool shiftPressed = ModifierKeys == Keys.Shift;
         public ListViewColumnSorter lvwColumnSorter;
-
+        public bool shiftPressed = ModifierKeys == Keys.Shift;
         public MainForm()
         {
             InitializeComponent();
@@ -25,6 +23,82 @@ namespace NeonImageSorter
             PreviewBox.Image = Resources.PreviewImage;
             lvwColumnSorter = new ListViewColumnSorter();
             Photos.ListViewItemSorter = lvwColumnSorter;
+            Photos.Sorting = SortOrder.None;
+            Photos.ListViewItemSorter = null;
+        }
+
+        public class ListViewColumnSorter : IComparer
+        {
+            public ListViewColumnSorter()
+            {
+                ColumnToSort = 0;
+                OrderOfSort = SortOrder.None;
+                ObjectCompare = new CaseInsensitiveComparer();
+            }
+
+            public SortOrder Order
+            {
+                set { OrderOfSort = value; }
+                get { return OrderOfSort; }
+            }
+
+            public int SortColumn
+            {
+                set { ColumnToSort = value; }
+                get { return ColumnToSort; }
+            }
+
+            public int Compare(object x, object y)
+            {
+                int compareResult;
+                ListViewItem listviewX = (ListViewItem)x;
+                ListViewItem listviewY = (ListViewItem)y;
+
+                string textX = listviewX.SubItems[ColumnToSort].Text;
+                string textY = listviewY.SubItems[ColumnToSort].Text;
+
+                if (ColumnToSort == 0)
+                {
+                    // Sort by text in first column
+                    if (OrderOfSort == SortOrder.Descending)
+                    {
+                        compareResult = ObjectCompare.Compare(textX, textY);
+                    }
+                    else if (OrderOfSort== SortOrder.Ascending)
+                    {
+                        compareResult = ObjectCompare.Compare(textY, textX);
+                    }
+                    else
+                    {
+                        compareResult = 0;
+                    }
+                }
+                else
+                {
+                    // Sort by date in second column
+                    DateTime dateX = DateTime.Parse(listviewX.SubItems[1].Text);
+                    DateTime dateY = DateTime.Parse(listviewY.SubItems[1].Text);
+
+                    if (OrderOfSort == SortOrder.Descending)
+                    {
+                        compareResult = ObjectCompare.Compare(dateX, dateY);
+                    }
+                    else if (OrderOfSort == SortOrder.Ascending)
+                    {
+                        compareResult = ObjectCompare.Compare(dateY, dateX);
+                    }
+                    else
+                    {
+                        compareResult = 0;
+                    }
+                }
+
+                return compareResult;
+            }
+
+            private int ColumnToSort;
+            private CaseInsensitiveComparer ObjectCompare;
+            private SortOrder OrderOfSort;
         }
 
         public class PhotoInfo
@@ -109,6 +183,7 @@ namespace NeonImageSorter
 
         private void DateSortButton_Click(object sender, EventArgs e)
         {
+            shiftPressed = ModifierKeys.HasFlag(Keys.Shift);
             if (shiftPressed)
             {
                 lvwColumnSorter.SortColumn = 1;
@@ -124,8 +199,6 @@ namespace NeonImageSorter
             Photos.Sorting = SortOrder.None;
             Photos.ListViewItemSorter = null;
         }
-
-
 
         private void DownButton_Click(object sender, EventArgs e)
         {
@@ -153,57 +226,6 @@ namespace NeonImageSorter
                     item.Selected = true;
                     item.Focused = true;
                 }
-            }
-        }
-
-        public class ListViewColumnSorter : IComparer
-        {
-            private int ColumnToSort;
-            private SortOrder OrderOfSort;
-            private CaseInsensitiveComparer ObjectCompare;
-
-            public ListViewColumnSorter()
-            {
-                ColumnToSort = 0;
-                OrderOfSort = SortOrder.None;
-                ObjectCompare = new CaseInsensitiveComparer();
-            }
-
-            public int Compare(object x, object y)
-            {
-                int compareResult;
-                ListViewItem listviewX = (ListViewItem)x;
-                ListViewItem listviewY = (ListViewItem)y;
-
-                DateTime dateX = DateTime.Parse(listviewX.SubItems[1].Text);
-                DateTime dateY = DateTime.Parse(listviewY.SubItems[1].Text);
-
-                if (OrderOfSort == SortOrder.Ascending)
-                {
-                    compareResult = ObjectCompare.Compare(dateX, dateY);
-                }
-                else if (OrderOfSort == SortOrder.Descending)
-                {
-                    compareResult = ObjectCompare.Compare(dateY, dateX);
-                }
-                else
-                {
-                    compareResult = 0;
-                }
-
-                return compareResult;
-            }
-
-            public int SortColumn
-            {
-                set { ColumnToSort = value; }
-                get { return ColumnToSort; }
-            }
-
-            public SortOrder Order
-            {
-                set { OrderOfSort = value; }
-                get { return OrderOfSort; }
             }
         }
 
@@ -282,6 +304,36 @@ namespace NeonImageSorter
             }
         }
 
+        private void NameSortButton_Click(object sender, EventArgs e)
+        {
+            bool shiftPressed = ModifierKeys.HasFlag(Keys.Shift);
+            if (shiftPressed)
+            {
+                lvwColumnSorter.SortColumn = 0;
+                lvwColumnSorter.Order = SortOrder.Ascending;
+            }
+            else
+            {
+                lvwColumnSorter.SortColumn = 0;
+                lvwColumnSorter.Order = SortOrder.Descending;
+            }
+            Photos.ListViewItemSorter = lvwColumnSorter;
+            Photos.Sorting = SortOrder.None;
+            Photos.ListViewItemSorter = null;
+
+            // check if there is at least one selected item
+            if (Photos.SelectedItems.Count > 0)
+            {
+                // get the selected item and set the index to the item variable
+                ListViewItem selectedItem = Photos.SelectedItems[0];
+                int itemIndex = selectedItem.Index;
+
+                // set the selected item and focus on it
+                selectedItem.Selected = true;
+                selectedItem.Focused = true;
+            }
+        }
+
         private void Photos_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
@@ -316,6 +368,7 @@ namespace NeonImageSorter
             }
             shiftPressed = e.Shift;
         }
+
         private void Photos_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.ShiftKey)
@@ -323,6 +376,7 @@ namespace NeonImageSorter
                 shiftPressed = false;
             }
         }
+
         private void Photos_MouseDown(object sender, MouseEventArgs e)
         {
             dragStartLocation = e.Location;

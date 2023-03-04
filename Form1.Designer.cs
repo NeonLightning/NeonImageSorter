@@ -40,6 +40,7 @@
             SettingsButton = new Button();
             ClearButton = new Button();
             DateSortButton = new Button();
+            NameSortButton = new Button();
             ((System.ComponentModel.ISupportInitialize)PreviewBox).BeginInit();
             SuspendLayout();
             // 
@@ -180,11 +181,22 @@
             DateSortButton.UseVisualStyleBackColor = true;
             DateSortButton.Click += DateSortButton_Click;
             // 
+            // NameSortButton
+            // 
+            NameSortButton.Location = new Point(0, 0);
+            NameSortButton.Name = "NameSortButton";
+            NameSortButton.Size = new Size(75, 23);
+            NameSortButton.TabIndex = 11;
+            NameSortButton.Text = "Name";
+            NameSortButton.UseVisualStyleBackColor = true;
+            NameSortButton.Click += NameSortButton_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1008, 729);
+            Controls.Add(NameSortButton);
             Controls.Add(DateSortButton);
             Controls.Add(ClearButton);
             Controls.Add(SettingsButton);
@@ -217,5 +229,6 @@
         private Button SettingsButton;
         private Button ClearButton;
         private Button DateSortButton;
+        private Button NameSortButton;
     }
 }
